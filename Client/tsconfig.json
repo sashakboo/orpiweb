@@ -41,5 +41,5 @@
     "./@types",
     "./src/**/*",
     "./stories/**/*"
-  ]
+, "stylelint.config.js"  ]
 }

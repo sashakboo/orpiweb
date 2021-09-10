@@ -1,11 +1,17 @@
 import * as React from 'react';
 import { render } from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
 
-import TestButton from './test-button';
+import App from './App';
+import './styles/app.css';
 
-require('./styles/app.css');
+const app = (
+  <BrowserRouter basename='#'>
+    <App />
+  </BrowserRouter>
+);
 
 render(
-  <TestButton text='Click me' />,
+  app,
   document.getElementById('root')
 );
