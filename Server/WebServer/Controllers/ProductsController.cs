@@ -1,48 +1,54 @@
-﻿using System.Collections.Generic;
-using System.Web.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using WebServer.Models;
+using WebServer.Services;
 
 namespace WebServer.Controllers
 {
-  public class ProductsController : ApiController
+  [Route("[controller]/[action]")]
+  [ApiController]
+  public class ProductsController : ControllerBase
   {
-    private readonly ProductsService productService = ProductsService.GetInstance();
+    private readonly IProductsService productService;
 
-    [HttpGet]
-    public IEnumerable<ProductType> Categories()
+    public ProductsController(IProductsService productsService)
     {
-      return productService.GetCategories();
+      this.productService = productsService;
     }
 
     [HttpGet]
-    public IEnumerable<Product> GetProducts(int productTypeId)
+    public async Task<IEnumerable<ProductTypeDto>> Categories()
     {
-      var productType = productService.GetProductType(productTypeId);
-      return productService.GetProducts(productType);
+      return await this.productService.GetCategories();
     }
 
     [HttpGet]
-    public IEnumerable<Product> GetBasket()
+    public async Task<IEnumerable<ProductDto>> GetProducts(int productTypeId)
     {
-      return productService.GetBasket();
+      return await this.productService.GetProducts(productTypeId);
+    }
+
+    [HttpGet]
+    public async Task<IEnumerable<ProductDto>> GetBasket()
+    {
+      return await this.productService.GetBasket();
     }
 
     [HttpPost]
-    public IHttpActionResult AddToBasket(Product product)
+    public async Task<IActionResult> AddToBasket(ProductDto product)
     {
-      productService.AddToBasket(product);
+      await this.productService.AddToBasket(product);
 
-      return Ok();
+      return this.Ok();
     }
 
     [HttpPost]
-    public IHttpActionResult DeleteFromBasket(Product product)
+    public async Task<IActionResult> DeleteFromBasket(ProductDto product)
     {
-      productService.DeleteFromBasket(product);
+      await this.productService.DeleteFromBasket(product);
 
-      return Ok();
+      return this.Ok();
     }
-
-
   }
 }
