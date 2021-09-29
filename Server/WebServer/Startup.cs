@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,7 +26,9 @@ namespace WebServer
           jsonOptions.JsonSerializerOptions.PropertyNamingPolicy = null;
         }
       );
-      services.AddEntityFrameworkSqlite().AddDbContext<ProductsContext>();
+
+      string defaultConnection = this.Configuration.GetConnectionString("DefaultConnection");
+      services.AddDbContext<ProductsContext>(x => x.UseSqlite(defaultConnection));
       services.AddAutoMapper(typeof(Startup).Assembly);
       services.AddScoped<IProductsRepository, ProductsRepository>();
       services.AddScoped<IProductsService, ProductsService>();
