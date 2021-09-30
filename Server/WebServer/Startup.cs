@@ -27,7 +27,7 @@ namespace WebServer
         }
       );
 
-      string defaultConnection = this.Configuration.GetConnectionString("DefaultConnection");
+      var defaultConnection = this.Configuration.GetConnectionString("DefaultConnection");
       services.AddDbContext<ProductsContext>(x => x.UseSqlite(defaultConnection));
       services.AddAutoMapper(typeof(Startup).Assembly);
       services.AddScoped<IProductsRepository, ProductsRepository>();
@@ -43,8 +43,6 @@ namespace WebServer
       }
 
       app.UseRouting();
-
-      app.UseAuthorization();
 
       app.UseEndpoints(endpoints =>
       {
